@@ -113,16 +113,18 @@ If you're not prompted, you might already have VSCode in your microphone permiss
 
 You can run these commands, or use the button in the status bar (bottom right hand corner) of VSCode, the choice is yours:
 
-**>Bee Heard: New Code Memo** (`beeHeard.newCodeMemo`): Start recording a new code memo.
-**>Bee Heard: End Code Memo** (`beeHeard.endCodeMemo`): Stop the ongoing code memo recording.
+- **>Bee Heard: New Code Memo** (`beeHeard.newCodeMemo`): Start recording a new code memo.
+- **>Bee Heard: End Code Memo** (`beeHeard.endCodeMemo`): Stop the ongoing code memo recording.
 
 ## Configuration Commands
 
 The configuration is set so the extension works out of the box, these are optional:
 
-**>Bee Heard: Configure Save Path** (`beeHeard.configureSavePath`): Set a custom directory where code memos will be saved.
-**>Bee Heard: Reset Save Path** (`beeHeard.resetSavePath`): Reset the save path to the default directory. _Default: `${workspaceFolder}/code_memos`._
-**>Bee Heard: Set Max Duration** (`beeHeard.setMaxDuration`): Set the maximum duration for recordings in seconds _Default: 300 seconds (5 minutes). Set to 0 for unlimited recording._
+- **>Bee Heard: Configure Save Path** (`beeHeard.configureSavePath`): Set a custom directory where code memos will be saved.
+- **>Bee Heard: Reset Save Path** (`beeHeard.resetSavePath`): Reset the save path to the default directory. 
+    - _Default: `${workspaceFolder}/code_memos`._
+- **>Bee Heard: Set Max Duration** (`beeHeard.setMaxDuration`): Set the maximum duration for recordings in seconds.  
+    - _Default: 300 seconds (5 minutes). Set to 0 for unlimited recording._
 
 ## Disclaimer
 
