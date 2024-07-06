@@ -104,6 +104,7 @@ No data is collected with this application, it is entirely local to your machine
 
 ## Additional Information
 
+- [Download this Extension on the VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=NightOwlLabs.Bee-Heard): Download this extension for VSCode.
 - [Main GitHub Repository](https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos): Main GitHub repository for this project.
 - [Bee Heard Website](https://beeheard.com): Visit the family of applications under our Bee Heard product.
 - [Night Owl Labs](https://nightowllabs.io): We're passionate about software! Visit our site and see our offerings.
