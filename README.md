@@ -104,9 +104,19 @@ No data is collected with this application, it is entirely local to your machine
 
 ## Additional Information
 
-- [Main GitHub Repository](https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos)
-- [Visit Our Website](https://beeheard.com)
+- [Main GitHub Repository](https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos): Main GitHub repository for this project.
+- [Bee Heard Website](https://beeheard.com): Visit the family of applications under our Bee Heard product.
+- [Night Owl Labs](https://nightowllabs.io): We're passionate about software! Visit our site and see our offerings.
 
 ## License
 
 [MIT License](./LICENSE)
+
+---------------
+
+<br />
+<div align="center">
+    <a href="https://nightowllabs.io" target="_blank">
+        <img src="./docs/images/footer.png" width="100" height="100"/>
+    </a>
+</div>
