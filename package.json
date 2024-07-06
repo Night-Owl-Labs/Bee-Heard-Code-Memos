@@ -1,0 +1,111 @@
+{
+  "name": "Bee-Heard",
+  "displayName": "Bee Heard: Code Memos",
+  "description": "Record voice memos as you code.",
+  "version": "1.0.0",
+  "publisher": "NightOwlLabs",
+  "homepage": "https://beeheard.com",
+  "license": "MIT",
+  "maintainers": [
+		"Scott Grivner <scott.grivner@nightowllabs.io>"
+	],
+  "engines": {
+    "vscode": "^1.45.0"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "beeHeard.newCodeMemo",
+        "title": "Bee Heard: New Code Memo"
+      },
+      {
+        "command": "beeHeard.endCodeMemo",
+        "title": "Bee Heard: End Code Memo"
+      },
+      {
+        "command": "beeHeard.configureSavePath",
+        "title": "Bee Heard: Configure Save Path"
+      },
+      {
+        "command": "beeHeard.resetSavePath",
+        "title": "Bee Heard: Reset Save Path"
+      },
+      {
+        "command": "beeHeard.setMaxDuration",
+        "title": "Bee Heard: Set Maximum Recording Duration"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Bee Heard Configuration",
+      "properties": {
+        "beeHeard.savePath": {
+          "type": "string",
+          "default": "${workspaceFolder}/code_memos",
+          "description": "The default path where code memos will be saved"
+        },
+        "beeHeard.maxDuration": {
+          "type": "number",
+          "default": 300,
+          "description": "The maximum recording duration in seconds (default is 300 seconds, 5 minutes). Set to 0 for unlimited recording."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^14.0.0",
+    "@types/vscode": "^1.45.0",
+    "eslint": "^6.8.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.0.0",
+    "typescript": "^3.9.5",
+    "vscode-test": "^1.4.0"
+  },
+  "dependencies": {
+    "deepspeech": "^0.9.3",
+    "node-record-lpcm16": "^1.0.1",
+    "fs": "^0.0.1-security"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos/issues"
+  },
+  "categories": [
+		"Other"
+	],
+  "keywords": [
+    "voice-memo",
+    "code-memo",
+    "voice-memos",
+    "code-memos",
+    "voice",
+    "memo",
+    "memos",
+    "code",
+    "audio",
+    "record",
+    "transcription"
+  ],
+  "icon": "docs/images/icon.png",
+  "galleryBanner": {
+		"color": "#0A69FA",
+		"theme": "dark"
+	}
+}
