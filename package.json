@@ -13,7 +13,11 @@
     "vscode": "^1.45.0"
   },
   "activationEvents": [
-    "*"
+    "onCommand:beeHeard.newCodeMemo",
+    "onCommand:beeHeard.endCodeMemo",
+    "onCommand:beeHeard.configureSavePath",
+    "onCommand:beeHeard.resetSavePath",
+    "onCommand:beeHeard.setMaxDuration"
   ],
   "main": "./src/extension.js",
   "contributes": {

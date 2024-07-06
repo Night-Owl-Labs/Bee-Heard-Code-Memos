@@ -12,3 +12,6 @@ vsc-extension-quickstart.md
 /test
 *.vsix
 /packages
+node_modules/
+dist/
+**/*.map
