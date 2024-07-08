@@ -1,7 +1,14 @@
+/* eslint-disable */
+// @ts-ignore
 const vscode = require("vscode");
+/* eslint-enable */
 const path = require("path");
 const fs = require("fs");
+const { execSync } = require("child_process");
+/* eslint-disable */
+// @ts-ignore
 const record = require("node-record-lpcm16");
+/* eslint-enable */
 
 let recording = false;
 let audioStream;
@@ -11,7 +18,17 @@ let outputChannel;
 let recordingMessage;
 let maxDurationTimeout;
 
-function activate(context) {
+/* eslint-disable */
+// @ts-ignore
+async function activate(context) {
+/* eslint-enable */
+  try {
+    await checkSoxInstalled();
+  } catch (error) {
+    vscode.window.showErrorMessage(error.message);
+    return;
+  }
+
   outputChannel = vscode.window.createOutputChannel("Bee Heard");
   outputChannel.appendLine("Bee Heard: Code Memos extension is now active!");
   outputChannel.show(true);
@@ -60,6 +77,24 @@ function activate(context) {
   //vscode.window.showInformationMessage(`Code Memos will be saved to: ${defaultSavePath}`);
 }
 
+async function checkSoxInstalled() {
+  try {
+    const result = execSync("which sox").toString().trim();
+    if (!result) {
+      throw new Error("Code Memo - Sox is not installed or not found in PATH.");
+    }
+    console.log(`Sox found at: ${result}`);
+    //vscode.window.showInformationMessage(`Code Memo - Sox found at: ${result}`);
+
+    // Add the SoX directory to the PATH environment variable
+    const soxDir = path.dirname(result);
+    process.env.PATH = `${soxDir}:${process.env.PATH}`;
+    console.log("Updated PATH:", process.env.PATH);
+  } catch (error) {
+    throw new Error("Code Memo - Sox is not installed or not found in PATH.");
+  }
+}
+
 function configureSavePath() {
   vscode.window
     .showOpenDialog({ canSelectFolders: true, canSelectMany: false })
@@ -74,7 +109,7 @@ function configureSavePath() {
             vscode.ConfigurationTarget.Global
           );
         vscode.window.showInformationMessage(
-          `Code Memos save path set to: ${newPath}`
+          `Code Memo - Save path set to: ${newPath}`
         );
       }
     });
@@ -90,18 +125,31 @@ function resetSavePath() {
       vscode.ConfigurationTarget.Global
     );
   vscode.window.showInformationMessage(
-    "Code Memos save path reset to default workspace folder"
+    "Code Memo - Save path reset to default workspace folder"
   );
 }
 
 function getSavePath() {
+  const workspaceFolders = vscode.workspace.workspaceFolders;
+  if (!workspaceFolders || workspaceFolders.length === 0) {
+    throw new Error("Code Memo - No workspace folder open. Please open a folder or workspace in VSCode.");
+  }
+
   const configuredPath = vscode.workspace
     .getConfiguration()
     .get("beeHeard.savePath");
   return configuredPath.replace(
     "${workspaceFolder}",
-    vscode.workspace.workspaceFolders[0].uri.fsPath
+    workspaceFolders[0].uri.fsPath
   );
+}
+
+function getLocalDateString() {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 function startRecording() {
@@ -112,7 +160,7 @@ function startRecording() {
     return;
   }
 
-  vscode.window.showInformationMessage("Code Memo - Recording Started..."); // Show popup for recording started
+  vscode.window.showInformationMessage("Code Memo - Recording Started...");
   recording = true;
   recordButton.text = "$(primitive-square) End Code Memo";
   recordButton.command = "beeHeard.endCodeMemo";
@@ -122,48 +170,56 @@ function startRecording() {
     "$(record) Recording..."
   );
 
-  const date = new Date().toISOString().split("T")[0]; // Get current date in YYYY-MM-DD format
-  const audioDir = path.join(getSavePath(), date);
+  try {
+    const date = getLocalDateString();
+    const audioDir = path.join(getSavePath(), date);
 
-  if (!fs.existsSync(audioDir)) {
-    fs.mkdirSync(audioDir, { recursive: true });
-    copyAboutFile(audioDir); // Copy ABOUT.md when creating the folder
-  }
+    if (!fs.existsSync(audioDir)) {
+      fs.mkdirSync(audioDir, { recursive: true });
+      copyAboutFile(audioDir);
+    }
 
-  const files = fs
-    .readdirSync(audioDir)
-    .filter((file) => file.endsWith(".wav"));
-  const nextIndex = files.length + 1;
-  const audioFilePath = path.join(audioDir, `memo_${date}_${nextIndex}.wav`);
+    const files = fs
+      .readdirSync(audioDir)
+      .filter((file) => file.endsWith(".wav"));
+    const nextIndex = files.length + 1;
+    const audioFilePath = path.join(audioDir, `memo_${date}_${nextIndex}.wav`);
 
-  fileStream = fs.createWriteStream(audioFilePath, { encoding: "binary" });
+    fileStream = fs.createWriteStream(audioFilePath, { encoding: "binary" });
 
-  audioStream = record
-    .record({
-      sampleRate: 16000,
-      threshold: 0,
-      verbose: true,
-      recordProgram: "rec",
-      silence: "10.0",
-    })
-    .stream()
-    .on("error", (err) => {
-      console.error(`Recording error: ${err.message}`);
-    })
-    .on("data", (chunk) => {
-      outputChannel.appendLine(`Recording data chunk: ${chunk.length} bytes`);
-    });
+    const env = { ...process.env };
 
-  audioStream.pipe(fileStream);
+    audioStream = record
+      .record({
+        sampleRate: 16000,
+        threshold: 0,
+        verbose: true,
+        recordProgram: "sox",
+        silence: "10.0",
+        env, // Pass the modified environment to the recording process
+      })
+      .stream()
+      //.on("error", (err) => {
+        // outputChannel.appendLine(`Recording error: ${err.message}`); // Uncomment to DEBUG
+      //})
+      .on("data", (chunk) => {
+        outputChannel.appendLine(`Recording data chunk: ${chunk.length} bytes`);
+      });
 
-  outputChannel.appendLine(`Recording to file: ${audioFilePath}`);
+    audioStream.pipe(fileStream);
 
-  // Set maximum duration timeout
-  const maxDuration = vscode.workspace
-    .getConfiguration()
-    .get("beeHeard.maxDuration");
-  if (maxDuration > 0) {
-    maxDurationTimeout = setTimeout(stopRecording, maxDuration * 1000);
+    outputChannel.appendLine(`Recording to file: ${audioFilePath}`);
+
+    // Set maximum duration timeout
+    const maxDuration = vscode.workspace
+      .getConfiguration()
+      .get("beeHeard.maxDuration");
+    if (maxDuration > 0) {
+      maxDurationTimeout = setTimeout(stopRecording, maxDuration * 1000);
+    }
+  } catch (error) {
+    outputChannel.appendLine(`Error during recording setup: ${error.message}`);
+    stopRecording();
   }
 }
 
@@ -182,11 +238,11 @@ function stopRecording() {
   if (recordingMessage) {
     recordingMessage.dispose();
   }
-  vscode.window.showInformationMessage("Code Memo - Recording Stopped"); // Show popup for recording stopped
+  vscode.window.showInformationMessage("Code Memo - Recording Stopped");
 
   if (audioStream) {
-    audioStream.unpipe(fileStream); // Unpipe the audio stream from the file stream
-    audioStream.destroy(); // Destroy the audio stream to stop recording
+    audioStream.unpipe(fileStream);
+    audioStream.destroy();
     fileStream.end(() => {
       outputChannel.appendLine("Recording ended.");
     });
@@ -218,13 +274,16 @@ function setMaxDuration() {
         );
       } else {
         vscode.window.showErrorMessage(
-          "Invalid input for maximum recording duration"
+          "Code Memo - Invalid input for maximum recording duration"
         );
       }
     });
 }
 
+/* eslint-disable */
+// @ts-ignore
 function copyAboutFile(destinationDir) {
+  /* eslint-enable */
   const sourceFile = path.join(__dirname, "../ABOUT.md");
   const destFile = path.join(destinationDir, "../ABOUT.md");
 

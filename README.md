@@ -27,6 +27,7 @@ _It's a great tool to record todos, issues, or mental notes in a voice format to
     - [Functional Commands](#functional-commands)
     - [Configuration Commands](#configuration-commands)
 - [Disclaimer](#disclaimer)
+- [Local Install](#local-install)
 - [Changelog](#changelog)
 - [Credits](#credits)
 - [References](#references)
@@ -42,17 +43,20 @@ _It's a great tool to record todos, issues, or mental notes in a voice format to
 ## Installation
 
 1. **Install the extension**:
-    - You can install the extension from the [VSCode Marketplace](https://marketplace.visualstudio.com/).
+    - You can install the extension from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Night-Owl-Labs.Bee-Heard).
 
 2. **Install SoX**:
-    - SoX (Sound eXchange) is required to record audio using the `node-record-lpcm16` library. You need to install SoX on your system for the extension to work correctly.
+    - SoX (Sound eXchange) is required to record audio using the `node-record-lpcm16` library. 
+    - You need to install SoX on your system for the extension to work correctly.
+        - You'll get an error if `SoX` is not installed.
 
 3. **Grant Microphone Access to VSCode**:
     - You'll need to ensure that VSCode has microphone access for the extension to work correctly.
+    - Read below for more details.
 
 ### Install SoX on macOS
 
-To install SoX on macOS, use Homebrew:
+To install SoX on macOS, use the [Homebrew](https://brew.sh/) package manager:
 ```sh
 brew install sox
 ```
@@ -63,16 +67,16 @@ To install SoX on Windows, download the installer for Sox on [SourceForge](https
 
 ### Install SoX on Linux
 
-To install SoX on Linux, use your distribution's package manager. For example, on Debian-based systems:
+To install SoX on Linux, use your distribution's package manager (or Homebrew). For example, on Debian-based systems:
 ```sh
 sudo apt-get install sox
 ```
 
 ## Grant Microphone Access
 
-You'll need to ensure that VSCode has microphone access for the extension to work.
-When you run the extension, after installing SoX, you should get prompted for VSCode microphone access.
-If you're not prompted, you might already have VSCode in your microphone permissions, in that case, you'll need to ensure its enabled:
+* You'll need to ensure that VSCode has microphone access for the extension to work.
+* When you run the extension, after installing SoX, you should get prompted for VSCode microphone access.
+* If you're not prompted, you might already have VSCode in your microphone permissions, in that case, you'll need to ensure its enabled:
 
 ### Grant Microphone Access on macOS
 
@@ -99,12 +103,13 @@ If you're not prompted, you might already have VSCode in your microphone permiss
 ## Usage
 
 * After installing the extension and SoX, open a folder in VSCode.
+    * If you do not open a folder, or have a set directory set, you'll receive an error stating you need to be in a project/folder/workspace.
 * Use the ``>Bee Heard: New Code Memo`` command from the command palette or click the ``New Code Memo`` button in the status bar (bottom right hand corner) to start recording.
 * Use the ``>Bee Heard: End Code Memo`` command from the command palette or click the ``End Code Memo`` button in the status bar (bottom right hand corner) to stop recording.
 * The recorded memos will be saved in the configured directory (your current open project/directory by default):
     * A copy of the `ABOUT.md` file will be placed in the `code_memos` directory when it is created. If you use your code memos in your projects, please attach the `ABOUT.md` as a reference in the directory.
     * The `code_memos` folder will create new sub-folders with today's date each time a code memo is generated.
-    * The audio files will be in `wav` format, with a naming convention of `memo_[today's date]_[sequence].wav`.
+    * The audio files will be in [Waveform Audio File Format (wav)](https://en.wikipedia.org/wiki/WAV) format, with a naming convention of `memo_[today's date]_[sequence].wav`.
     * Each time a new memo is created for the same day, the sequence will increment by `1`.
 
 ## Commands
@@ -130,6 +135,13 @@ The configuration is set so the extension works out of the box, these are option
 
 No data is collected with this application, it is entirely local to your machine.
 
+## Local Install
+
+To install the application locally run the following command to install the package dependencies:
+```bash
+npm install
+```
+
 ## Changelog
 
 Please refer to the [Changelog](.github/CHANGELOG.md) file in this repository for updates, changes, and more detailed information about the project.
@@ -140,7 +152,7 @@ View our [Credits](.github/CREDITS.md) file for a list of acknowledgements for t
 
 ## References
 
-- [Download this Extension on the VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=NightOwlLabs.Bee-Heard): Download this extension for VSCode.
+- [Download this Extension on the VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=night-owl-labs.bee-heard): Download this extension for VSCode.
 - [Main GitHub Repository](https://github.com/Night-Owl-Labs/Bee-Heard-Code-Memos): Main GitHub repository for this project.
 - [Bee Heard Website](https://beeheard.com): Visit the family of applications under our Bee Heard product.
 - [Night Owl Labs](https://nightowllabs.io): We're passionate about software! Visit our site and see our offerings.
