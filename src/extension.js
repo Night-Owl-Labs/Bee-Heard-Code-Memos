@@ -31,7 +31,7 @@ async function activate(context) {
 
   outputChannel = vscode.window.createOutputChannel("Bee Heard");
   outputChannel.appendLine("Bee Heard: Code Memos extension is now active!");
-  outputChannel.show(true);
+  // outputChannel.show(true);
 
   const startRecordingCommand = vscode.commands.registerCommand(
     "beeHeard.newCodeMemo",
