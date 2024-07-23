@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - 2024-07-23
 
-### Changed
+### Removed
 
 - Commented out code (`outputChannel.show(true);`) to prevent the output window from opening automatically when the extension is activated.
 
